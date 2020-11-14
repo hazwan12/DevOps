@@ -71,6 +71,7 @@ def newbug():
     return render_template("content/newbug.html", title='New Bug', form=form, legend='Create Bug Report')
 
 @app.route("/bug/<int:bug_id>")
+@login_required
 def bug(bug_id):
     bug = Bug.query.get_or_404(bug_id)
     comments = Comment.query.filter_by(bug_id=bug_id).all()
@@ -176,5 +177,4 @@ def post_comment(bug_id):
     comment = Comment(comment=cmt.get("comment"), bug_id=bug.id, username=current_user.username)
     db.session.add(comment)
     db.session.commit()
-    flash('Commented!', 'success')
-    return redirect(url_for('home'))
+    return render_template('content/bug.html', title=bug.summary, bug=bug)
