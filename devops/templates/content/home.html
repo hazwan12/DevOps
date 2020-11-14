@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+	<h2 style="text-align:center;padding:30px;"> Welcome to DevOps</h2>
+</div>
+<!-- <div class="input-group" style="width:50%;margin:auto;">
+	<input type="text" class="form-control" placeholder="Search bugs">
+	<div class="input-group-append">
+		<button class="btn btn-secondary bg-dark" type="button">
+		<i class="fa fa-search"></i>
+		</button>
+	</div>
+</div> -->
+<div class="container mb-3 mt-3">
+	<table class="table table-striped table-sm table-bordered bug_datatable" style="width: 100%">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Summary</th>
+				<th>Product</th>
+				<th>Platform</th>
+				<th>Date posted</th>
+				<th>Reporter</th>
+				<th>Developer</th>
+				<th>Reviewer</th>
+				<th>Priority</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for bug in bugs %}
+			<tr>
+				<td>{{ bug.id }}</td>
+				<td><a href="{{  url_for('bug', bug_id=bug.id) }}">{{ bug.summary }}</a></td>
+				<td>{{ bug.product }}</td>
+				<td>{{ bug.platform }}</td>
+				<td>{{ bug.date_posted.strftime('%Y-%m-%d %H:%M %p') }}</td>
+				<td>{{ bug.author.username }}</td>
+				<td>{{ bug.assigned_to.username }}</td>
+				<td>{{ bug.reviewed_by.username }}</td>
+				<td>{{ bug.priority }}</td>
+				<td>{{ bug.status }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+<script>
+	$('.bug_datatable').DataTable();
+</script>
+{% endblock content %}

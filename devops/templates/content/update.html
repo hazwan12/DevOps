@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="card bg-light">
+        <article class="card-body mx-auto">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom md-4">{{ legend }}</legend>
+                <div class="form-row">
+                    <div class="col-md-6" style="padding-right:20px;">
+                        <div class="form-group">
+                        {{ form.summary.label(class="form-control-label") }}
+                        {% if form.summary.errors %}
+                            {{ form.summary(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.summary.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.summary(class="form-control") }}
+                        {% endif %}
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                {{ form.product.label(class="form-control-label") }}
+                                {% if form.product.errors %}
+                                    {{ form.product(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.product.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.product(class="form-control") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                {{ form.platform.label(class="form-control-label") }}
+                                {% if form.platform.errors %}
+                                    {{ form.platform(class="form-control is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.platform.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.platform(class="form-control") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6" style="padding-right:20px;">
+                        {{ form.whatHappen.label(class="form-control-label") }}
+                        {% if form.whatHappen.errors %}
+                            {{ form.whatHappen(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.whatHappen.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.whatHappen(class="form-control", rows="5") }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6" style="padding-right:20px;">
+                        {{ form.howHappen.label(class="form-control-label") }}
+                        {% if form.howHappen.errors %}
+                            {{ form.howHappen(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.howHappen.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.howHappen(class="form-control", rows="7") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-6" style="padding-right:20px;">
+                        {{ form.shouldHappen.label(class="form-control-label") }}
+                        {% if form.shouldHappen.errors %}
+                            {{ form.shouldHappen(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.shouldHappen.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.shouldHappen(class="form-control", rows="7") }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        {{ form.assigned_to(class="form-control") }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ form.reviewed_by(class="form-control") }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form.priority(class="form-control") }}
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group w-25">
+                {{ form.status(class="form-control") }}
+            </div>
+            <div class="form-group w-25">
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </div>
+        </form>
+        </article>
+    </div>   
+{% endblock content %}

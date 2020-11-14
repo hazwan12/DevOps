@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="card bg-light">
+            <form method="POST" action="">
+              {{ form.hidden_tag() }}
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <div class="form-group">
+                  {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-lg", placeholder="Email address") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                  {% if form.password.errors %}
+                        {{ form.password(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.password(class="form-control form-control-lg", placeholder="Password") }}
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                  {{ form.remember(class="form-check-input") }}
+                  {{ form.remember.label(class="form-check-label") }}
+                </div>
+                <div class="form-group">
+                  {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

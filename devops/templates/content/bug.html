@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% block content %}
+<body class="bg-light">
+    <div class="col-md-8 mx-auto">
+      <div class="card">
+        <div class="mx-2 my-1">
+          <small>Reported: {{ bug.date_posted.strftime('%Y-%m-%d %H:%M %p') }}</small>
+          <h4>{{ bug.summary }}</h4>
+          <hr class="mx-0 my-1"></hr>
+          <div class="row">
+            <div class="col-md-6">
+              <div><h6 class="mx-0 my-1">Product: {{ bug.product }}</h6></div>
+              <div><h6 class="mx-0 my-1">Platform: {{ bug.platform }}</h6></div>
+              <div><h6 class="mx-0 my-1">Status: {{ bug.status }}</h6></div>
+              <div><h6 class="mx-0 my-1">Priority: {{ bug.priority }}</h6></div>
+            </div>
+            <div class="col-md-6">
+              <div><h6 class="mx-0 my-1">Reported by: {{ bug.author.username }}</h6></div>
+              <div><h6 class="mx-0 my-1">Assigned to: {{ bug.assigned_to.username }}</h6></div>
+              <div><h6 class="mx-0 my-1">Reviewed by: {{ bug.reviewed_by.username }}</h6></div>
+            </div>
+          </div>
+          <hr class="mx-0 my-1"></hr>
+          <h6>What happened?</h6>
+          <p> {{  bug.whatHappen }} </p>
+          <hr class="mx-0 my-1"></hr>
+          <h6>How did it happen?</h6>
+          <p> {{  bug.howHappen }} </p>
+          <hr class="mx-0 my-1"></hr>
+          <h6>What should have happen?</h6>
+          <p> {{  bug.shouldHappen }} </p>
+        </div>
+      </div>
+      <div>
+        {% if current_user.role == 'Developer' %}
+          {% if bug.status == 'Unassigned' %}
+          <form action="{{ url_for('start_working', bug_id=bug.id) }}" method="POST">
+            <input class="btn btn-secondary btn-sm mt-1 mb-1" type="submit" value="Start working">
+          </form>
+          {% endif %}
+          {% if bug.status == 'Work in progress' %}
+          <form action="{{ url_for('submit_to_reviewer', bug_id=bug.id) }}" method="POST">
+            <input class="btn btn-secondary btn-sm mt-1 mb-1" type="submit" value="Submit">
+          </form>
+          {% endif %}
+        {% elif current_user.role == 'Reviewer' %}
+          {% if bug.status == 'Pending for review' %}
+          <div class="row ml-1">
+            <form action="{{ url_for('back_to_developer', bug_id=bug.id) }}" method="POST">
+              <input class="btn btn-danger btn-sm mx-1 my-1" type="submit" value="Reject">
+            </form>
+            <form action="{{ url_for('close_bug', bug_id=bug.id) }}" method="POST">
+              <input class="btn btn-primary btn-sm mt-1 mb-1" type="submit" value="Accept">
+            </form>
+          </div>
+          {% endif %}
+        {% elif current_user.role == 'Triager' %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_bug', bug_id=bug.id) }}">Update</a>
+        {% endif %}
+        {% if current_user.role == 'Triager' %}
+        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+        {% endif %}
+      </div>
+      <div class="card my-2">
+        <small class="mx-2">Comment as {{ current_user.username }}</small>
+        <div class="mx-2 my-1">
+          <form action="{{ url_for('post_comment', bug_id=bug.id) }}" method="POST">
+            <div class="form-group mx-2 my-1">
+              <textarea class="form-control" name="comment" id="comment" placeholder="What are your thoughts?" rows="3"></textarea>
+            </div>
+            <div class="pull-right mr-2 my-1">
+              <input class="btn btn-dark btn-sm" type="submit" value="COMMENT">
+            </div>
+          </form>
+        </div>
+      </div>
+      {% for comment in comments %}
+      <div class="card">
+        <div class="card-header">
+          {{ comment.username }}
+          {{ comment.date_posted.strftime('%Y-%m-%d %H:%M %p') }}
+        </div>
+        <div class="card-body">
+          {{ comment.comment }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+</body>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete bug report?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <form action="{{ url_for('delete_bug', bug_id=bug.id) }}" method="POST">
+          <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
